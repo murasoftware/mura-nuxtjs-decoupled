@@ -1,0 +1,32 @@
+{
+	"global":{
+		"rendererProperties":{
+			"templateArray":["Default"],
+			"collectionLayoutArray":["VueCollectionLayout"],
+			"hashurls":false,
+			"primaryContentTypes":"Page,Link,File"
+		},
+		"modules":{
+			"Example":{
+				"name":"My Module",
+				"contenttypes":"*",
+				"configurator":"<div class=mura-control-group\">\r\n<label>Example Variable<\/label>\r\n<input type=\"text\" name=\"myvar\" class=\"objectParam\"\/>\r\n<\/div>"
+			},
+			"VueCollectionLayout":{
+				"name":"Default Collection Component",
+				"contenttypes":"",
+				"configurator":""
+			}
+		},
+	"sites":{
+		"default":{
+			"rendererProperties":{
+
+			},
+			"modules":{
+
+			}
+		}
+	}
+	}
+}
