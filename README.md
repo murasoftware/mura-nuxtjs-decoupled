@@ -23,7 +23,7 @@ Second you need to start Angular up:
 
 Then in terminal go to the ./NuxtJS directory within the project root:
 ```
-cd {project_root}/NuxtJS
+cd {project_root}/nuxtjs
 npm install
 ```
 
@@ -73,9 +73,9 @@ https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/mura/docker-compose
 
 Here you can see an example of registering a module created from within NuxtJS and registered via the mura.config.json and mura.config.js
 
-https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/NuxtJS/mura.config.js#L7-L13
+https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/nuxtjs/mura.config.js#L7-L13
 
-https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/NuxtJS/static/mura.config.json#L8-L13
+https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/nuxtjs/static/mura.config.json#L8-L13
 
 ## Mura ORM Assembler and Scaffolder
 
