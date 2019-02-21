@@ -1,6 +1,13 @@
 <template>
 <div>
 <script>window.queuedMuraCmds=[],window.queuedMuraPreInitCmds=[],window.mura=window.m=window.Mura=function(u){window.queuedMuraCmds.push(u)},window.Mura.preInit=function(u){window.queuedMuraPreInitCmds.push(u)};</script>
+<div>
+	<ul title="Primary Navigtion" class="primarynav" v-if="primaryNavData">
+		<li v-for="item of primaryNavData" :key="item.contentid">
+				<a v-bind:href="item.url">{{item.menutitle}}</a>
+		</li>
+	</ul>
+</div>
 <h1>{{content.title}}</h1>
 <div v-html="content.body"></div>
 <div v-html="region.maincontent"></div>
@@ -13,17 +20,16 @@ import Mura from 'mura.js'
 
 require('../mura.config.js')
 
-
 var path =''
 export default {
   components: {
-
   },
 	data () {
 		return {
 			content:'',
 			primaryNavData:'',
-			mainregion:''
+			mainregion:'',
+			Mura: Mura
 		}
 	},
 	mounted(){
@@ -178,5 +184,36 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+
+ul.primarynav {
+	padding: 10px 16px;
+	list-style: none;
+	background-color: #eee;
+}
+
+/* Display list items side by side */
+ul.primarynav li {
+	display: inline;
+	font-size: 18px;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+ul.primarynav li+li:before {
+	padding: 8px;
+	color: black;
+	content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+ul.primarynav li a {
+	color: #0275d8;
+	text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+ul.primarynav li a:hover {
+	color: #01447e;
+	text-decoration: underline;
 }
 </style>

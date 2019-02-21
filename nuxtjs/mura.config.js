@@ -5,7 +5,7 @@ import Vue from 'vue'
 
 require('mura.js/src/core/ui.serverutils')
 
-Mura.UI.VueServer=Mura.UI.extend(
+Mura.UI.Vue=Mura.UI.extend(
 /** @lends Mura.UI.Vue.prototype */
 {
 	vm:'',
@@ -66,13 +66,13 @@ Mura.UI.VueServer=Mura.UI.extend(
 
 });
 
-Mura.Module.Example=Mura.UI.VueServer.extend(
+Mura.Module.Example=Mura.UI.Vue.extend(
  {
 	component:Example
 });
 
 //This is registered as a collection layout in the mura.config.json
-Mura.Module.VueCollectionLayout=Mura.UI.VueServer.extend(
+Mura.Module.VueCollectionLayout=Mura.UI.Vue.extend(
  {
 	component:CollectionLayout
 });
