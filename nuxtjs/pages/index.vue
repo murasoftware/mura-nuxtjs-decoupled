@@ -1,6 +1,6 @@
 <template>
 <div>
-<script>window.queuedMuraCmds=[],window.queuedMuraPreInitCmds=[],window.mura=window.m=window.Mura=function(u){window.queuedMuraCmds.push(u)},window.Mura.preInit=function(u){window.queuedMuraPreInitCmds.push(u)};</script>
+<script>if(typeof Mura == 'undefined'{window.queuedMuraCmds=[],window.queuedMuraPreInitCmds=[],window.mura=window.m=window.Mura=function(u){window.queuedMuraCmds.push(u)},window.Mura.preInit=function(u){window.queuedMuraPreInitCmds.push(u)};}</script>
 <div>
   <b-navbar toggleable="lg" type="dark" variant="info">
     <b-navbar-brand href="#">Mura/NuxtJS</b-navbar-brand>
@@ -41,7 +41,8 @@ require('../mura.config.js')
 var path =''
 
 var loadContent=async function(context){
-	if(typeof context.res != 'undefined'){
+
+	if(process.server){
 		Mura.init({
 			rootpath:"http://localhost:8888",
 			siteid:"default",
@@ -49,10 +50,10 @@ var loadContent=async function(context){
 			response:context.res,
 			request:context.req
 		})
-	}
 
-	//Don't rely on ready event for when to fire
-	Mura.holdReady(true);
+		//Don't rely on ready event for when to fire
+		Mura.holdReady(true);
+	}
 
 	const content= await Mura.renderFilename(context.route.path,context.route.query).then(function(rendered){
 		return rendered
@@ -173,7 +174,6 @@ export default {
 			setTimeout(
 				()=>{
 					Mura('#htmlqueues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'))
-					Mura('.mura-toolbar').fadeIn();
 				},
 				100
 			)
