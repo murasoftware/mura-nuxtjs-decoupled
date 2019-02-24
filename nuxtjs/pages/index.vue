@@ -39,6 +39,87 @@ import Mura from 'mura.js'
 require('../mura.config.js')
 
 var path =''
+
+var loadContent=async function(context){
+	if(typeof context.res != 'undefined'){
+		Mura.init({
+			rootpath:"http://localhost:8888",
+			siteid:"default",
+			processMarkup:false,
+			response:context.res,
+			request:context.req
+		})
+	}
+
+	//Don't rely on ready event for when to fire
+	Mura.holdReady(true);
+
+	const content= await Mura.renderFilename(context.route.path,context.route.query).then(function(rendered){
+		return rendered
+	},function(rendered){
+		if(!rendered){
+			return Mura
+				.getEntity('content')
+				.set({
+					title:'404',
+					menutitle:'404',
+					body:'The content that you requested can not be found',
+					contentid: Mura.createUUID(),
+					isnew:1,
+					siteid: Mura.siteid,
+					type: 'Page',
+					subtype: 'Default',
+					contentid: Mura.createUUID(),
+					contenthistid: Mura.createUUID(),
+					filename:"404"
+				})
+		} else {
+			return rendered
+		}
+	})
+
+	var primaryNavData=await Mura.getFeed('content')
+		.where()
+		.prop('parentid').isEQ('00000000000000000000000000000000001')
+		.sort('orderno')
+		.getQuery()
+		.then(function(collection){
+			let tempArray=collection.getAll().items;
+			tempArray.unshift({to:"/",menutitle:"Home",title:"Home",filename:"",contentid:"00000000000000000000000000000000001"});
+			return tempArray;
+		});
+
+	if(content.exists()){
+		var crumbs=await content.get('crumbs').then(function(crumbs){
+			return crumbs.get('items').map(function(item){
+				return {
+					text:item.get('menutitle'),
+					to:"/" + item.get('filename'),
+					active:(item.contentid==content.get('contentid'))
+				}
+			}).reverse();
+		});
+	} else {
+		var crumbs=[]
+	}
+
+	const mainregion=await content.renderDisplayRegion('maincontent')
+
+	if(content.get('redirect') && typeof location != 'undefined'){
+		location.href=content.get('redirect')
+		return
+	} else {
+		return {
+			content:content.getAll(),
+			primaryNavData:primaryNavData,
+			region:{
+				maincontent:mainregion
+			},
+			crumbs:crumbs
+		}
+	}
+}
+
 export default {
   components: {
   },
@@ -52,95 +133,24 @@ export default {
 		}
 	},
 	mounted(){
-    this.init()
-  },
-	async asyncData (context) {
-
-		if(typeof context.res != 'undefined'){
-			Mura.init({
-				rootpath:"http://localhost:8888",
-				siteid:"default",
-				processMarkup:false,
-				response:context.res,
-				request:context.req
+		this.init()
+	},
+	watch:{
+		async '$route.query'() {
+			const data=await loadContent({
+				route:$nuxt.$route
 			})
+
+			this.content=data.content;
+			this.crumbs=data.crumbs;
+			this.primaryNavData=data.primaryNavData;
+			this.region=data.region;
+
+			this.init();
 		}
-
-		//Don't rely on ready event for when to fire
-		Mura.holdReady(true);
-
-		let query={};
-
-		if (process.client) {
-			query=Mura.getQueryStringParams()
-		} else {
-			query=context.route.query;
-		}
-
-		const content= await Mura.renderFilename(context.route.path,query).then((rendered)=>{
-			return rendered
-		},(rendered)=>{
-			if(!rendered){
-				return Mura
-					.getEntity('content')
-					.set({
-						title:'404',
-						menutitle:'404',
-						body:'The content that you requested can not be found',
-						contentid: Mura.createUUID(),
-						isnew:1,
-						siteid: Mura.siteid,
-						type: 'Page',
-						subtype: 'Default',
-						contentid: Mura.createUUID(),
-						contenthistid: Mura.createUUID(),
-						filename:"404"
-					})
-			} else {
-				return rendered
-			}
-		})
-
-		const primaryNavData=await Mura.getFeed('content')
-			.where()
-			.prop('parentid').isEQ('00000000000000000000000000000000001')
-			.sort('orderno')
-			.getQuery()
-			.then(collection=>{
-				let tempArray=collection.getAll().items;
-				tempArray.unshift({to:"/",menutitle:"Home",title:"Home",filename:"",contentid:"00000000000000000000000000000000001"});
-				return tempArray;
-			});
-
-		if(content.exists()){
-			var crumbs=await content.get('crumbs').then(($crumbs)=>{
-				return $crumbs.get('items').map((item)=>{
-					return {
-						text:item.get('menutitle'),
-						to:"/" + item.get('filename'),
-						active:(item.contentid==content.get('contentid'))
-					}
-				}).reverse();
-			});
-		} else {
-			var crumbs=[]
-		}
-
-		const mainregion=await content.renderDisplayRegion('maincontent')
-
-		if(content.get('redirect') && typeof location != 'undefined'){
-			location.href=content.get('redirect')
-			return
-		} else {
-			return {
-				content:content.getAll(),
-				primaryNavData:primaryNavData,
-				region:{
-					maincontent:mainregion
-				},
-				crumbs:crumbs
-			}
-		}
+	},
+	async asyncData (context) {
+		return await loadContent(context)
 	},
   layout(context) {
     return 'default'
