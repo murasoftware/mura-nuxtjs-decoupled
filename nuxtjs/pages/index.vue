@@ -9,7 +9,7 @@
 
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
-        <b-nav-item v-bind:class="{ 'active': (content.contentid==item.contentid)}" v-for="item of primaryNavData" :key="item.contentid" v-bind:href="item.url">{{item.menutitle}}</b-nav-item>
+        <b-nav-item v-bind:class="{ 'active': (content.contentid==item.contentid)}" v-for="item of primaryNavData" :key="item.contentid" :to="'/'+item.filename">{{item.menutitle}}</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -107,7 +107,7 @@ export default {
 			.getQuery()
 			.then(collection=>{
 				let tempArray=collection.getAll().items;
-				tempArray.unshift({url:"/",menutitle:"Home",title:"Home",filename:"",contentid:"00000000000000000000000000000000001"});
+				tempArray.unshift({to:"/",menutitle:"Home",title:"Home",filename:"",contentid:"00000000000000000000000000000000001"});
 				return tempArray;
 			});
 
@@ -115,7 +115,7 @@ export default {
 			return crumbs.get('items').map((item)=>{
 				return {
 					text:item.get('menutitle'),
-					href:item.get('url'),
+					to:"/" + item.get('filename'),
 					active:(item.contentid==content.get('contentid'))
 				}
 			}).reverse();
