@@ -26,7 +26,6 @@
   </b-navbar>
 </div>
 <h1>{{content.title}}</h1>
-
 <b-breadcrumb v-if="crumbs.length > 1" :items="crumbs" />
 <div v-html="content.body"></div>
 <div v-html="region.maincontent"></div>
@@ -57,13 +56,15 @@ export default {
   },
 	async asyncData (context) {
 
-		Mura.init({
-			rootpath:"http://localhost:8888",
-			siteid:"default",
-			processMarkup:false,
-			response:context.res,
-			request:context.req
-		})
+		if(typeof context.res != 'undefined'){
+			Mura.init({
+				rootpath:"http://localhost:8888",
+				siteid:"default",
+				processMarkup:false,
+				response:context.res,
+				request:context.req
+			})
+		}
 
 		//Don't rely on ready event for when to fire
 		Mura.holdReady(true);
@@ -111,16 +112,20 @@ export default {
 				return tempArray;
 			});
 
-		const crumbs=await content.get('crumbs').then((crumbs)=>{
-			return crumbs.get('items').map((item)=>{
-				return {
-					text:item.get('menutitle'),
-					to:"/" + item.get('filename'),
-					active:(item.contentid==content.get('contentid'))
-				}
-			}).reverse();
-		});
 
+			//if(content.has('crumbs')){
+				const crumbs=await content.get('crumbs').then((crumbs)=>{
+				return crumbs.get('items').map((item)=>{
+					return {
+						text:item.get('menutitle'),
+						to:"/" + item.get('filename'),
+						active:(item.contentid==content.get('contentid'))
+					}
+				}).reverse();
+			});
+		//} else{
+		//	const crumbs=[]
+		//}
 
 		const mainregion=await content.renderDisplayRegion('maincontent')
 
@@ -160,6 +165,7 @@ export default {
 			setTimeout(
 				()=>{
 					Mura('#htmlqueues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'))
+					Mura('.mura-toolbar').fadeIn();
 				},
 				100
 			)
