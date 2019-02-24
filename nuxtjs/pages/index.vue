@@ -26,6 +26,8 @@
   </b-navbar>
 </div>
 <h1>{{content.title}}</h1>
+
+<b-breadcrumb v-if="crumbs.length > 1" :items="crumbs" />
 <div v-html="content.body"></div>
 <div v-html="region.maincontent"></div>
 <div id="htmlqueues"></div>
@@ -46,7 +48,8 @@ export default {
 			content:'',
 			primaryNavData:'',
 			mainregion:'',
-			Mura: Mura
+			Mura: Mura,
+			crumbs:''
 		}
 	},
 	mounted(){
@@ -65,54 +68,60 @@ export default {
 		//Don't rely on ready event for when to fire
 		Mura.holdReady(true);
 
-		function renderContent(context){
-			let query={}
-			if (process.client) {
-				query=Mura.getQueryStringParams()
+		let query={};
+
+		if (process.client) {
+			query=Mura.getQueryStringParams()
+		} else {
+			query=context.route.query;
+		}
+
+		const content= await Mura.renderFilename(context.route.path,query).then((rendered)=>{
+			return rendered
+		},(rendered)=>{
+			if(!rendered){
+				return Mura
+					.getEntity('content')
+					.set({
+						title:'404',
+						menutitle:'404',
+						body:'The content that you requested can not be found',
+						contentid: Mura.createUUID(),
+						isnew:1,
+						siteid: Mura.siteid,
+						type: 'Page',
+						subtype: 'Default',
+						contentid: Mura.createUUID(),
+						contenthistid: Mura.createUUID(),
+						filename:"404"
+					})
 			} else {
-				query=context.route.query;
-			}
-
-			return Mura.renderFilename(context.route.path,query).then((rendered)=>{
 				return rendered
-			},(rendered)=>{
-				if(!rendered){
-					return Mura
-						.getEntity('content')
-						.set({
-							title:'404',
-							menutitle:'404',
-							body:'The content that you requested can not be found',
-							contentid: Mura.createUUID(),
-							isnew:1,
-							siteid: Mura.siteid,
-							type: 'Page',
-							subtype: 'Default',
-							contentid: Mura.createUUID(),
-							contenthistid: Mura.createUUID(),
-							filename:"404"
-						})
-				} else {
-					return rendered
+			}
+		})
+
+		const primaryNavData=await Mura.getFeed('content')
+			.where()
+			.prop('parentid').isEQ('00000000000000000000000000000000001')
+			.sort('orderno')
+			.getQuery()
+			.then(collection=>{
+				let tempArray=collection.getAll().items;
+				tempArray.unshift({url:"/",menutitle:"Home",title:"Home",filename:"",contentid:"00000000000000000000000000000000001"});
+				return tempArray;
+			});
+
+		const crumbs=await content.get('crumbs').then((crumbs)=>{
+			return crumbs.get('items').map((item)=>{
+				return {
+					text:item.get('menutitle'),
+					href:item.get('url'),
+					active:(item.contentid==content.get('contentid'))
 				}
-			})
-		}
+			}).reverse();
+		});
 
-		function getPrimaryNavData(){
-			return Mura.getFeed('content')
-				.where()
-				.prop('parentid').isEQ('00000000000000000000000000000000001')
-				.sort('orderno')
-				.getQuery()
-				.then(collection=>{
-					let tempArray=collection.getAll().items;
-					tempArray.unshift({url:"/",menutitle:"Home",title:"Home",filename:"",contentid:"00000000000000000000000000000000001"});
-					return tempArray;
-				});
-		}
 
-		const content=await renderContent(context)
-		const primaryNavData=await getPrimaryNavData()
 		const mainregion=await content.renderDisplayRegion('maincontent')
 
 		if(content.get('redirect')){
@@ -124,7 +133,8 @@ export default {
 				primaryNavData:primaryNavData,
 				region:{
 					maincontent:mainregion
-				}
+				},
+				crumbs:crumbs
 			}
 		}
 
@@ -172,65 +182,5 @@ export default {
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-
-ul.primarynav {
-	padding: 10px 16px;
-	list-style: none;
-	background-color: #eee;
-}
-
-/* Display list items side by side */
-ul.primarynav li {
-	display: inline;
-	font-size: 18px;
-}
-
-/* Add a slash symbol (/) before/behind each list item */
-ul.primarynav li+li:before {
-	padding: 8px;
-	color: black;
-	content: "/\00a0";
-}
-
-/* Add a color to all links inside the list */
-ul.primarynav li a {
-	color: #0275d8;
-	text-decoration: none;
-}
-
-/* Add a color on mouse-over */
-ul.primarynav li a:hover {
-	color: #01447e;
-	text-decoration: underline;
-}
 </style>
