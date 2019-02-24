@@ -46,9 +46,9 @@ export default {
 		return {
 			content:'',
 			primaryNavData:'',
-			mainregion:'',
+			region:{maincontent:''},
 			Mura: Mura,
-			crumbs:''
+			crumbs:[]
 		}
 	},
 	mounted(){
@@ -112,10 +112,9 @@ export default {
 				return tempArray;
 			});
 
-
-			//if(content.has('crumbs')){
-				const crumbs=await content.get('crumbs').then((crumbs)=>{
-				return crumbs.get('items').map((item)=>{
+		if(content.exists()){
+			var crumbs=await content.get('crumbs').then(($crumbs)=>{
+				return $crumbs.get('items').map((item)=>{
 					return {
 						text:item.get('menutitle'),
 						to:"/" + item.get('filename'),
@@ -123,13 +122,13 @@ export default {
 					}
 				}).reverse();
 			});
-		//} else{
-		//	const crumbs=[]
-		//}
+		} else {
+			var crumbs=[]
+		}
 
 		const mainregion=await content.renderDisplayRegion('maincontent')
 
-		if(content.get('redirect')){
+		if(content.get('redirect') && typeof location != 'undefined'){
 			location.href=content.get('redirect')
 			return
 		} else {
@@ -142,7 +141,6 @@ export default {
 				crumbs:crumbs
 			}
 		}
-
 	},
   layout(context) {
     return 'default'
