@@ -50,11 +50,11 @@ var loadContent=async function(context){
 			response:context.res,
 			request:context.req
 		})
-
-		//Don't rely on ready event for when to fire
-		Mura.holdReady(true);
 	}
 
+	//Don't rely on ready event for when to fire
+	Mura.holdReady(true);
+	
 	const content= await Mura.renderFilename(context.route.path,context.route.query).then(function(rendered){
 		return rendered
 	},function(rendered){
