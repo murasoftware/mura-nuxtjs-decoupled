@@ -45,8 +45,6 @@ import Mura from 'mura.js'
 
 require('../mura.config.js')
 
-var path =''
-
 var loadContent=async function(context){
 
 	if(process.server){
