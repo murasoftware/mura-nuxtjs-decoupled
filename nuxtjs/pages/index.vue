@@ -25,10 +25,17 @@
     </b-collapse>
   </b-navbar>
 </div>
-<h1>{{content.title}}</h1>
+<main role="main" class="container">
+<h1 class="mt-5">{{content.title}}</h1>
 <b-breadcrumb v-if="crumbs.length > 1" :items="crumbs" />
 <div v-html="content.body"></div>
 <div v-html="region.maincontent"></div>
+</main>
+<footer class="footer">
+ <div class="container">
+	 <span class="text-muted">&copy; {{new Date().getFullYear()}}</span>
+ </div>
+</footer>
 <div id="htmlqueues"></div>
 </div>
 </template>
@@ -54,7 +61,7 @@ var loadContent=async function(context){
 
 	//Don't rely on ready event for when to fire
 	Mura.holdReady(true);
-	
+
 	const content= await Mura.renderFilename(context.route.path,context.route.query).then(function(rendered){
 		return rendered
 	},function(rendered){
