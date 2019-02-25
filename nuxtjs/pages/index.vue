@@ -141,20 +141,7 @@ export default {
 	mounted(){
 		this.init()
 	},
-	watch:{
-		async '$route.query'() {
-			const data=await loadContent({
-				route:$nuxt.$route
-			})
-
-			this.content=data.content;
-			this.crumbs=data.crumbs;
-			this.primaryNavData=data.primaryNavData;
-			this.region=data.region;
-
-			this.init();
-		}
-	},
+	watchQuery: true,
 	async asyncData (context) {
 		return await loadContent(context)
 	},
