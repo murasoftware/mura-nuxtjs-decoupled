@@ -33,7 +33,7 @@
 </main>
 <footer class="footer">
  <div class="container">
-	 <span class="text-muted">&copy; {{new Date().getFullYear()}}</span>
+	 <span class="text-muted">&copy; {{new Date().getFullYear()}} yourdomain.com</span>
  </div>
 </footer>
 <div id="htmlqueues"></div>
