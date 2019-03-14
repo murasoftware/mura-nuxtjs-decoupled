@@ -3,7 +3,6 @@ import Example from '@/components/modules/Example'
 import CollectionLayout from '@/components/modules/CollectionLayout'
 import Vue from 'vue'
 
-require('mura.js/src/core/ui.serverutils')
 require('mura.js/src/core/ui.vueserver')
 
 Mura.Module.Example=Mura.UI.VueServer.extend(
