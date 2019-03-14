@@ -4,7 +4,7 @@
 			"templateArray":["Default"],
 			"collectionLayoutArray":["VueCollectionLayout"],
 			"hashurls":false,
-			"primaryContentTypes":"Page,Link,File"
+			"primaryContentTypes":"Page,Link,File,Folder,Calendar"
 		},
 		"modules":{
 			"Example":{
