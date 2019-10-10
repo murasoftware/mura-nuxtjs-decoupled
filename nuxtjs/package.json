@@ -19,8 +19,8 @@
     "bootstrap-vue": "^2.0.0-rc.14",
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
-    "mura.js": "^1.0.138",
-    "nuxt": "^2.4.5"
+    "mura.js": "^1.0.153",
+    "nuxt": "^2.8.1"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",

@@ -10,7 +10,7 @@
 			"Example":{
 				"name":"My Module",
 				"contenttypes":"*",
-				"configurator":"<div class=mura-control-group\">\r\n<label>Example Variable<\/label>\r\n<input type=\"text\" name=\"myvar\" class=\"objectParam\"\/>\r\n<\/div>"
+				"configurator":"http://localhost:8888/core/test.html"
 			},
 			"VueCollectionLayout":{
 				"name":"Default Collection Component",
