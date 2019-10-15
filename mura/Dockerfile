@@ -1,4 +1,4 @@
-FROM blueriver/muracms:7.2
+FROM blueriver/muracms:8
 MAINTAINER Eddie Ballisty, eddie.ballisty@blueriver.com
 
 ARG admin_hspw=
