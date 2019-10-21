@@ -166,22 +166,24 @@ export default {
 			setTimeout(
 				()=>{
 					Mura('#htmlqueues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'))
+
+					if(content.exists()){
+
+						//Re-initialize Mura for browser with content node specific details
+						//console.log(content.get('config'))
+						Mura.init(Mura.extend({queueObjects:false,content:content}))
+
+						Mura.holdReady(false);
+
+						Mura.loader()
+							.loadcss(Mura.rootpath + '/core/modules/v1/core_assets/css/mura.8.min.css')
+							.loadcss(Mura.rootpath + '/core/modules/v1/core_assets/css/mura.8.skin.css');
+					}
 				},
 				100
 			)
 
-			if(content.exists()){
-
-				//Re-initialize Mura for browser with content node specific details
-				//console.log(content.get('config'))
-				Mura.init(Mura.extend({queueObjects:false,content:content}))
-
-				Mura.holdReady(false);
-
-				Mura.loader()
-					.loadcss(Mura.rootpath + '/core/modules/v1/core_assets/css/mura.8.min.css')
-					.loadcss(Mura.rootpath + '/core/modules/v1/core_assets/css/mura.8.skin.css');
-			}
+			
 		}
 	}
 }

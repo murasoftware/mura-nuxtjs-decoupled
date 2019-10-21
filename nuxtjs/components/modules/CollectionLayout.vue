@@ -1,7 +1,7 @@
 <template>
 	<div>
 	<ul>
-		<li v-for="item in context.collection.get('items')" v-bind:key="item">
+		<li  v-for="(item, idx) in context.collection.get('items')" :key="idx">
 			<a v-bind:href="item.get('url')">{{item.get('menutitle')}}</a>
 		</li>
 	</ul>
