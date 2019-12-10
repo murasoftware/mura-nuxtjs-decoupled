@@ -2,7 +2,7 @@ version: "3.5"
 services:
   #MySQL Service
   db:
-    image: mysql:5.7
+    image: mysql:latest
     environment:
         MYSQL_ROOT_PASSWORD: NOT_SECURE_CHANGE
         MYSQL_DATABASE: muradb
@@ -27,16 +27,16 @@ services:
       MURA_DBTYPE: mysql
       MURA_DBUSERNAME: root
       MURA_DBPASSWORD: NOT_SECURE_CHANGE
-      MURA_DBHOST: db
-      MURA_DBPORT: 3306
+      MURA_DBCONNECTIONSTRING: "jdbc:mysql://db:3306/muradb?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=true"
+      MURA_DBCLASS: com.mysql.cj.jdbc.Driver
       MURA_SITEIDINURLS: "false"
       MURA_RELATEDCONTENTSETID: "*"
       MURA_INDEXFILEINURLS: "false"
       MURA_EXTERNALCONFIG: "http://host.docker.internal:3000/mura.config.json"
       MURA_DEFAULTTHEMEURL: https://github.com/murasoftware/mura-minimal/archive/master.zip
     volumes:
-        #- ../../8/core:/var/www/core
-        #- ../../8/admin:/var/www/admin
+        #- ../../muracore:/var/www/core
+        #- ../../mura/admin:/var/www/admin
         - mura_nuxtjs_decoupled_plugins:/var/www/plugins
         - mura_nuxtjs_decoupled_themes:/var/www/themes
         - mura_nuxtjs_decoupled_sites:/var/www/sites
