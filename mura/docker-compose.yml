@@ -35,7 +35,7 @@ services:
       MURA_EXTERNALCONFIG: "http://host.docker.internal:3000/mura.config.json"
       MURA_DEFAULTTHEMEURL: https://github.com/murasoftware/mura-minimal/archive/master.zip
     volumes:
-        #- ../../muracore:/var/www/core
+        #- ../../mura/core:/var/www/core
         #- ../../mura/admin:/var/www/admin
         - mura_nuxtjs_decoupled_plugins:/var/www/plugins
         - mura_nuxtjs_decoupled_themes:/var/www/themes
