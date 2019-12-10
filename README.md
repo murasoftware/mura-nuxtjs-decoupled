@@ -4,7 +4,7 @@
 
 First you need to start Mura up:
 ```
-git clone https://github.com/blueriver/MuraNuxtJSDecoupled.git
+git clone https://github.com/murasoftware/mura-nuxtjs-decoupled.git
 cd MuraNuxtJSDecoupled
 git checkout master
 cd mura
@@ -21,7 +21,7 @@ Then go to http://localhost:8888 to initialize Mura's install then login with th
 Second you need to start Angular up:
 
 
-Then in terminal go to the ./NuxtJS directory within the project root:
+Then in terminal go to the ./nuxtjs directory within the project root:
 ```
 cd {project_root}/nuxtjs
 npm install
@@ -55,7 +55,7 @@ https://docs.getmura.com/v7-1/mura-developers/mura-rendering/murajs/
 
 ## Docker Image
 
-https://hub.docker.com/r/blueriver/muracms/
+https://hub.docker.com/r/murasoftware/mura/
 
 ## Theming
 
@@ -65,17 +65,17 @@ With this use case Mura modules, templates and content type includes are now loc
 
 There is a mura.config.json file that the Mura service reads in when loading to get what it needs to know from the client.
 
-https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/NuxtJS/static/mura.config.json
+https://github.com/murasoftware/mura-nuxtjs-decoupled/blob/master/NuxtJS/static/mura.config.json
 
 You tell Mura about it as an environment variable
 
-https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/mura/docker-compose.yml#L22
+https://github.com/murasoftware/mura-nuxtjs-decoupled/blob/master/mura/docker-compose.yml#L22
 
 Here you can see an example of registering a module created from within NuxtJS and registered via the mura.config.json and mura.config.js
 
-https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/nuxtjs/mura.config.js#L7-L13
+https://github.com/murasoftware/mura-nuxtjs-decoupled/blob/master/nuxtjs/mura.config.js#L7-L13
 
-https://github.com/blueriver/MuraNuxtJSDecoupled/blob/master/nuxtjs/static/mura.config.json#L8-L13
+https://github.com/murasoftware/mura-nuxtjs-decoupled/blob/master/nuxtjs/static/mura.config.json#L8-L13
 
 ## Mura ORM Assembler and Scaffolder
 
