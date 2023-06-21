@@ -20,7 +20,7 @@
     "cross-env": "^5.2.1",
     "express": "^4.17.1",
     "mura.js": "^1.0.171",
-    "nuxt": "^2.10.1"
+    "nuxt": "^3.4.3"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
